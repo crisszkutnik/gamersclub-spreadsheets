@@ -1,1 +1,6 @@
 *.log
+credentials.json
+data.json
+.vscode
+__pycache__
+token.pickle

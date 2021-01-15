@@ -1,10 +1,3 @@
-from selenium import webdriver
-import json
-
-# For testing
-m_id = 10426269
-f_driver = webdriver.Firefox()
-
 def get_players(container):
 	return [e.get_attribute("innerHTML") for e in container.find_elements_by_css_selector("a.tableMatch__playerLink")]
 
@@ -26,6 +19,20 @@ def get_team_level(table):
 	levels = [int(e.get_attribute("innerText")) for e in table.find_elements_by_css_selector("span.badge")]
 	levels.extend([int(e.get_attribute("innerText")) for e in table.find_elements_by_css_selector("div.lvl-value")])
 	return sum(levels) / len(levels)
+
+# Thanks to flashed.gg
+
+def get_rating(obj):
+	rounds_played = obj["team_score"] + obj["enemy_score"]
+	kpr = int(obj["kills"]) / rounds_played
+	dpr = int(obj["deaths"]) / rounds_played
+	apr = int(obj["assists"]) / rounds_played # assists per round
+	impact = 2.13 * kpr + 0.42 * apr - 0.41
+
+	# remove % from kast rating
+
+	return round(0.0073 * int(obj["kast"][:-1]) + 0.3591 * kpr - 0.5329 * dpr + 0.2372 * impact + 0.0032 * float(obj["adr"]) + 0.1587, 2)
+
 
 def extract_data(driver, match_id):
 	# First we have to select the correct table
@@ -71,6 +78,7 @@ def extract_data(driver, match_id):
 	for i in range(0, len(items)):
 		match_data[items[i]] = player_data[i].get_attribute("innerHTML")
 
-	print(json.dumps(match_data, indent=4))
+	match_data["diff"] = int(match_data["kills"]) - int(match_data["deaths"])
+	match_data["rating"] = get_rating(match_data)
 
-extract_data(f_driver, m_id)
+	return match_data
