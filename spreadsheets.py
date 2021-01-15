@@ -61,7 +61,7 @@ def login():
 	return build('sheets', 'v4', credentials=creds)
 
 
-def update_table(objs):
+def update_table(objs, spreadsheet_id):
 	service = login()
 
 	body = {
@@ -69,14 +69,10 @@ def update_table(objs):
 		"values": [sort_keys(obj) for obj in objs]
 	}
 
-	with open("data.json", "r") as f:
-		json_file = json.load(f)
-		spreadsheetId=json_file["spreadsheet_id"]
-
 	# Ignore error
 	sheet = service.spreadsheets()
 	result = sheet.values().append(
-		spreadsheetId=spreadsheetId,
+		spreadsheetId=spreadsheet_id,
 		range="A2:Y2",
 		body=body,
 		valueInputOption="RAW"

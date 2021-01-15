@@ -36,7 +36,7 @@ def get_rating(obj):
 	return round(0.0073 * int(obj["kast"][:-1]) + 0.3591 * kpr - 0.5329 * dpr + 0.2372 * impact + 0.0032 * float(obj["adr"]) + 0.1587, 2)
 
 
-def extract_data(driver, match_id):
+def extract_data(driver, match_id, playername):
 	# First we have to select the correct table
 	match_data = {
 		"id": match_id
@@ -46,7 +46,7 @@ def extract_data(driver, match_id):
 	players0 = get_players(tables[0])
 	players1 = get_players(tables[1])
 
-	if "cristobalszk" in players0:
+	if playername in players0:
 		player_table, enemy_table = tables
 		p_index = players0.index("cristobalszk")
 	else:
