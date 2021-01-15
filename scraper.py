@@ -1,3 +1,5 @@
+import json
+
 def get_players(container):
 	return [e.get_attribute("innerHTML") for e in container.find_elements_by_css_selector("a.tableMatch__playerLink")]
 
@@ -80,5 +82,7 @@ def extract_data(driver, match_id):
 
 	match_data["diff"] = int(match_data["kills"]) - int(match_data["deaths"])
 	match_data["rating"] = get_rating(match_data)
+
+	print(json.dumps(match_data, indent=4))
 
 	return match_data
