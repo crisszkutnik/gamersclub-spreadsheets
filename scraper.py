@@ -11,14 +11,8 @@ def get_players(container):
 def get_score(table):
 	return int(table.find_element_by_css_selector("span.TableMatchTeamScore").get_attribute("innerHTML"))
 
-def get_attribute(element, selector, attr):
-	return element.find_element_by_css_selector(selector).get_attribute(attr)
-
-def get_innerHTML(element, selector):
-	return get_attribute(element, selector, "innerHTML")
-
 def get_innerText(element, selector):
-	return get_attribute(element, selector, "innerText")
+	return element.find_element_by_css_selector(selector).get_attribute("innerText")
 
 def extra_data(driver):
 	data_cell = get_innerText(driver, "#match-info-lobby > div > div.stats.columns > div:nth-child(1) > div:nth-child(1)")
@@ -27,6 +21,11 @@ def extra_data(driver):
 	played_map = get_innerText(driver, "#match-info-lobby > div > div.stats.columns > div:nth-child(1) > div:nth-child(4)")[5:] # remove MAP\n
 
 	return hour, date, played_map
+
+def get_team_level(table):
+	levels = [int(e.get_attribute("innerText")) for e in table.find_elements_by_css_selector("span.badge")]
+	levels.extend([int(e.get_attribute("innerText")) for e in table.find_elements_by_css_selector("div.lvl-value")])
+	return sum(levels) / len(levels)
 
 def extract_data(driver, match_id):
 	# First we have to select the correct table
@@ -44,11 +43,14 @@ def extract_data(driver, match_id):
 	else:
 		enemy_table, player_table = tables
 		p_index = players1.index("cristobalszk")
+	
+	del tables # not going to use it anymore
 
 	# Table selected. Extract relevant data
 
 	# Match relevant data
-
+	match_data["team_level"] = get_team_level(player_table)
+	match_data["enemy_level"] = get_team_level(enemy_table)
 	match_data["team_score"] = get_score(player_table)
 	match_data["enemy_score"] = get_score(enemy_table)
 	match_data["victory"] = True if match_data["team_score"] > match_data["enemy_score"] else False
@@ -58,6 +60,7 @@ def extract_data(driver, match_id):
 
 	player_cell = player_table.find_elements_by_css_selector("tr.tableMatch__user")[p_index]
 	player_data = player_cell.find_elements_by_css_selector("td")
+	match_data["player_level"] = int(get_team_level(player_cell))
 	
 	items = ["kills", "assists", "deaths", "adr", "kdr", "kast", "s", "t", "fa", "1vsX", "mk", "fk"]
 	del player_data[0] # remove name cell
