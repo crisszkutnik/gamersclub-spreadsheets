@@ -23,7 +23,7 @@ You also have to install the correct driver for the browser that you are going t
 If you use Ubuntu, geckodriver for Firefox can be installed with the following command:
 `sudo apt install firefox-geckodriver`
 
-Otherwise, visit the (Selenium webpage)[https://selenium-python.readthedocs.io/installation.html#drivers] for instructions.
+Otherwise, visit the [Selenium webpage](https://selenium-python.readthedocs.io/installation.html#drivers) for instructions.
 
 ### 3. Set up spreadsheet API
 
