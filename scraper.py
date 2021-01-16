@@ -78,9 +78,9 @@ def extract_data(driver, match_id, playername):
 	match_data["points"] = int(player_data[-1].get_attribute("innerHTML").strip("\n")) # last cell will be points cell
 
 	for i in range(0, len(items)):
-		match_data[items[i]] = player_data[i].get_attribute("innerHTML")
+		match_data[items[i]] = float(player_data[i].get_attribute("innerHTML"))
 
-	match_data["diff"] = int(match_data["kills"]) - int(match_data["deaths"])
+	match_data["diff"] = match_data["kills"] - match_data["deaths"]
 	match_data["rating"] = get_rating(match_data)
 
 	print(json.dumps(match_data, indent=4))

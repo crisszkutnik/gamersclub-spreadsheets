@@ -5,7 +5,6 @@ from selenium.common.exceptions import WebDriverException
 def ie(opts):
 	return webdriver.Ie(options=opts)
 
-
 def opera(opts):
 	return webdriver.Opera(options=opts)
 
