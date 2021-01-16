@@ -7,7 +7,7 @@ points awarded/taken and rating 2.0
  
 Rating 2.0 is calculated based on [flashed.gg reverse engineering Rating 2.0](https://flashed.gg/posts/reverse-engineering-hltv-rating/)
 
-# Set up (Linux)
+# Set up
 
 ### 1. First, clone this repo
 
@@ -18,8 +18,12 @@ Rating 2.0 is calculated based on [flashed.gg reverse engineering Rating 2.0](ht
 pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib selenium
 `
 
-Right now it only supports Firefox webdriver. If on Ubuntu:
+You also have to install the correct driver for the browser that you are going to use 
+ 
+If you use Ubuntu, geckodriver for Firefox can be installed with the following command:
 `sudo apt install firefox-geckodriver`
+
+Otherwise, visit the [Selenium webpage](https://selenium-python.readthedocs.io/installation.html#drivers) for instructions.
 
 ### 3. Set up spreadsheet API
 
