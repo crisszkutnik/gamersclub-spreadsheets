@@ -1,6 +1,6 @@
-from scraper import extract_data
-from spreadsheets import update_table
-from driver import start_driver
+from src.scraper import extract_data
+from src.spreadsheets import update_table
+from src.driver import start_driver
 import json
 
 def main():

@@ -34,7 +34,11 @@ def sort_keys(obj):
 		"rating"
 	]
 
-	return [obj[key] for key in order]
+	for index in ["kdr", "adr"]:
+		obj[index] = obj[index].replace(".", ",")
+	# replace '.' with ',' because spreadsheets would not recognize numbers correctly otherwise
+
+	ret = [obj[key] for key in order]
 
 def login():
 	SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -43,8 +47,8 @@ def login():
 
 	creds = None
 
-	if os.path.exists("token.pickle"):
-		with open("token.pickle", "rb") as token:
+	if os.path.exists("../token.pickle"):
+		with open("../token.pickle", "rb") as token:
 			creds = pickle.load(token)
 
 	if not creds or not creds.valid:
