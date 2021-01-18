@@ -4,6 +4,7 @@ import json
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+import os
 
 def sort_keys(obj):
 	order = [
@@ -38,7 +39,7 @@ def sort_keys(obj):
 		obj[index] = obj[index].replace(".", ",")
 	# replace '.' with ',' because spreadsheets would not recognize numbers correctly otherwise
 
-	ret = [obj[key] for key in order]
+	return [obj[key] for key in order]
 
 def login():
 	SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -47,8 +48,8 @@ def login():
 
 	creds = None
 
-	if os.path.exists("../token.pickle"):
-		with open("../token.pickle", "rb") as token:
+	if os.path.exists("token.pickle"):
+		with open("token.pickle", "rb") as token:
 			creds = pickle.load(token)
 
 	if not creds or not creds.valid:
@@ -81,5 +82,7 @@ def update_table(objs, spreadsheet_id):
 		body=body,
 		valueInputOption="RAW"
 	).execute()
+	
+	print(result)
 
 	print("Spreadsheet updated")
